@@ -11,8 +11,6 @@ defmodule CounciltrackerWeb.EventView do
   end
 
   def render("event.json", %{event: event}) do
-    %{id: event.id,
-      occurred_on: event.occurred_on,
-      type: event.type}
+    %{id: event.id, occurred_on: event.occurred_on, type: event.type}
   end
 end

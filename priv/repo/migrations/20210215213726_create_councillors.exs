@@ -7,7 +7,9 @@ defmodule Counciltracker.Repo.Migrations.CreateCouncillors do
       add :surname, :text, default: ""
       add :given_name, :text, default: ""
       add :slug, :text, null: false
-      add :authority_id, references(:authorities, on_delete: :delete_all, type: :uuid), null: false
+
+      add :authority_id, references(:authorities, on_delete: :delete_all, type: :uuid),
+        null: false
 
       timestamps()
     end
