@@ -2,13 +2,15 @@ defmodule Counciltracker.Councillors.Councillor do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Counciltracker.Authorities.Authority
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "councillors" do
     field :given_name, :string
     field :slug, :string
     field :surname, :string
-    field :council_id, :binary_id
+    belongs_to :authority, Authority
 
     timestamps()
   end
@@ -17,12 +19,12 @@ defmodule Counciltracker.Councillors.Councillor do
   def changeset(councillor, attrs) do
     councillor
     |> cast(Map.put(attrs, :slug, generate_slug(attrs)), [
-      :council_id,
+      :authority_id,
       :surname,
       :given_name,
       :slug
     ])
-    |> validate_required([:council_id, :surname, :given_name, :slug])
+    |> validate_required([:authority_id, :surname, :given_name, :slug])
   end
 
   defp generate_slug(%{given_name: "", surname: ""}), do: nil

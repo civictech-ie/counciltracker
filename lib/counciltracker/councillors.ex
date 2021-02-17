@@ -6,27 +6,27 @@ defmodule Counciltracker.Councillors do
   import Ecto.Query, warn: false
   alias Counciltracker.Repo
 
-  alias Counciltracker.Councils.Council
+  alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors.Councillor
 
-  def list_councillors(%Council{id: council_id}) do
-    from(Councillor, where: [council_id: ^council_id])
+  def list_councillors(%Authority{id: authority_id}) do
+    from(Councillor, where: [authority_id: ^authority_id])
     |> Repo.all()
   end
 
-  def list_councillors(%Council{id: council_id}, %Date{} = date) do
-    from(Councillor, where: [council_id: ^council_id])
+  def list_councillors(%Authority{id: authority_id}, %Date{} = date) do
+    from(Councillor, where: [authority_id: ^authority_id])
     |> Repo.all()
   end
 
-  def get_councillor!(%Council{id: council_id}, id) do
-    from(Councillor, where: [id: ^id, council_id: ^council_id], limit: 1)
+  def get_councillor!(%Authority{id: authority_id}, id) do
+    from(Councillor, where: [id: ^id, authority_id: ^authority_id], limit: 1)
     |> Repo.one!()
   end
 
-  def create_councillor(%Council{} = council, %{} = attrs) do
+  def create_councillor(%Authority{id: authority_id}, %{} = attrs) do
     %Councillor{}
-    |> Councillor.changeset(Enum.into(attrs, %{council_id: council.id}))
+    |> Councillor.changeset(Enum.into(attrs, %{authority_id: authority_id}))
     |> Repo.insert()
   end
 

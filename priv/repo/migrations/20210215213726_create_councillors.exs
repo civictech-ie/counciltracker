@@ -7,12 +7,12 @@ defmodule Counciltracker.Repo.Migrations.CreateCouncillors do
       add :surname, :text, default: ""
       add :given_name, :text, default: ""
       add :slug, :text, null: false
-      add :council_id, references(:councils, on_delete: :delete_all, type: :uuid), null: false
+      add :authority_id, references(:authorities, on_delete: :delete_all, type: :uuid), null: false
 
       timestamps()
     end
 
-    create index(:councillors, [:council_id])
-    create index(:councillors, [:council_id, :slug])
+    create index(:councillors, [:authority_id])
+    create index(:councillors, [:authority_id, :slug])
   end
 end

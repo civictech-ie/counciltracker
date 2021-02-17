@@ -1,64 +1,64 @@
 defmodule Counciltracker.CouncillorsTest do
   use Counciltracker.DataCase
 
-  alias Counciltracker.Councils
-  alias Counciltracker.Councils.Council
+  alias Counciltracker.Authorities
+  alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors
 
   describe "councillors" do
     alias Counciltracker.Councillors.Councillor
 
-    @council_attrs %{name: "Dublin City Council"}
+    @authority_attrs %{name: "Dublin City Council"}
     @valid_attrs %{given_name: "Joe", surname: "Costello"}
     @update_attrs %{given_name: "Tara", surname: "Deacy"}
     @invalid_attrs %{given_name: nil, surname: nil}
 
-    def council_fixture(attrs \\ %{}) do
-      {:ok, council} =
+    def authority_fixture(attrs \\ %{}) do
+      {:ok, authority} =
         attrs
-        |> Enum.into(@council_attrs)
-        |> Councils.create_council()
+        |> Enum.into(@authority_attrs)
+        |> Authorities.create_authority()
 
-      council
+      authority
     end
 
     def councillor_fixture(attrs \\ %{}) do
-      council = council_fixture()
+      authority = authority_fixture()
 
       {:ok, councillor} =
         attrs
-        |> Enum.into(%{council_id: council.id})
+        |> Enum.into(%{authority_id: authority.id})
         |> Enum.into(@valid_attrs)
         |> Councillors.create_councillor()
 
       councillor
     end
 
-    test "list_councillors/0 returns all councillors" do
+    test "list_councillors/1 returns all councillors for an authority today" do
       councillor = councillor_fixture()
-      council = Councils.get_council!(councillor.council_id)
-      assert Councillors.list_councillors(council) == [councillor]
+      authority = Authorities.get_authority!(councillor.authority_id)
+      assert Councillors.list_councillors(authority) == [councillor]
     end
 
-    test "list_councillors/1 returns all councillors on a given date" do
+    test "list_councillors/2 returns all councillors for an authority on a given date" do
       councillor = councillor_fixture()
-      council = Councils.get_council!(councillor.council_id)
+      authority = Authorities.get_authority!(councillor.authority_id)
       date = ~D[2020-01-01]
-      assert Councillors.list_councillors(council, date) != [councillor]
+      assert Councillors.list_councillors(authority, date) != [councillor]
     end
 
-    test "get_councillor!/1 returns the councillor with given id" do
+    test "get_councillor!/2 returns the councillor with given id" do
       councillor = councillor_fixture()
-      council = Councils.get_council!(councillor.council_id)
+      authority = Authorities.get_authority!(councillor.authority_id)
 
-      assert Councillors.get_councillor!(council, councillor.id) == councillor
+      assert Councillors.get_councillor!(authority, councillor.id) == councillor
     end
 
-    test "create_councillor/1 with valid data creates a councillor" do
-      {:ok, %Council{} = council} = Councils.create_council(@council_attrs)
+    test "create_councillor/2 with valid data creates a councillor" do
+      {:ok, %Authority{} = authority} = Authorities.create_authority(@authority_attrs)
 
       assert {:ok, %Councillor{} = councillor} =
-               Councillors.create_councillor(council, @valid_attrs)
+               Councillors.create_councillor(authority, @valid_attrs)
 
       assert councillor.given_name == "Joe"
       assert councillor.surname == "Costello"
@@ -66,7 +66,10 @@ defmodule Counciltracker.CouncillorsTest do
     end
 
     test "create_councillor/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Councillors.create_councillor(@invalid_attrs)
+      {:ok, %Authority{} = authority} = Authorities.create_authority(@authority_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Councillors.create_councillor(authority, @invalid_attrs)
     end
 
     test "update_councillor/2 with valid data updates the councillor" do
@@ -82,12 +85,12 @@ defmodule Counciltracker.CouncillorsTest do
 
     test "update_councillor/2 with invalid data returns error changeset" do
       councillor = councillor_fixture()
-      council = Councils.get_council!(councillor.council_id)
+      authority = Authorities.get_authority!(councillor.authority_id)
 
       assert {:error, %Ecto.Changeset{}} =
                Councillors.update_councillor(councillor, @invalid_attrs)
 
-      assert councillor == Councillors.get_councillor!(council, councillor.id)
+      assert councillor == Councillors.get_councillor!(authority, councillor.id)
     end
 
     test "delete_councillor/1 deletes the councillor" do
@@ -96,8 +99,8 @@ defmodule Counciltracker.CouncillorsTest do
       assert {:ok, %Councillor{}} = Councillors.delete_councillor(councillor)
 
       assert_raise Ecto.NoResultsError, fn ->
-        council = Councils.get_council!(councillor.council_id)
-        Councillors.get_councillor!(council, councillor.id)
+        authority = Authorities.get_authority!(councillor.authority_id)
+        Councillors.get_councillor!(authority, councillor.id)
       end
     end
 

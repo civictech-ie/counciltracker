@@ -1,8 +1,8 @@
 defmodule CounciltrackerWeb.CouncillorControllerTest do
   use CounciltrackerWeb.ConnCase
 
-  alias Counciltracker.Councils
-  alias Counciltracker.Councils.Council
+  alias Counciltracker.Authorities
+  alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors
   alias Counciltracker.Councillors.Councillor
 
@@ -15,16 +15,16 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
     surname: "Chu"
   }
 
-  def fixture(:council) do
-    case Councils.create_council(@council_attrs) do
-      {:ok, %Council{} = council} -> council
+  def fixture(:authority) do
+    case Authorities.create_authority(@council_attrs) do
+      {:ok, %Authority{} = authority} -> authority
     end
   end
 
   def fixture(:councillor) do
-    council = fixture(:council)
+    authority = fixture(:authority)
 
-    case Councillors.create_councillor(Map.put(@councillor_attrs, :council_id, council.id)) do
+    case Councillors.create_councillor(Map.put(@councillor_attrs, :authority_id, authority.id)) do
       {:ok, %Councillor{} = councillor} -> councillor
     end
   end
@@ -34,13 +34,13 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
   end
 
   describe "index" do
-    setup [:create_council]
+    setup [:create_authority]
 
-    test "lists all councillors", %{conn: conn, council: council} do
+    test "lists all councillors", %{conn: conn, authority: authority} do
       conn = get(conn, Routes.councillor_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
 
-      {:ok, councillor} = Councillors.create_councillor(council, @councillor_attrs)
+      {:ok, councillor} = Councillors.create_councillor(authority, @councillor_attrs)
 
       conn = get(conn, Routes.councillor_path(conn, :index))
 
@@ -54,11 +54,11 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
       assert [id, slug] == [councillor.id, councillor.slug]
     end
 
-    test "lists all councillors on date", %{conn: conn, council: council} do
+    test "lists all councillors on date", %{conn: conn, authority: authority} do
       conn = get(conn, Routes.councillor_path(conn, :index), %{date: "2020-01-01"})
       assert json_response(conn, 200)["data"] == []
 
-      {:ok, councillor} = Councillors.create_councillor(council, @councillor_attrs)
+      {:ok, councillor} = Councillors.create_councillor(authority, @councillor_attrs)
 
       conn = get(conn, Routes.councillor_path(conn, :index))
 
@@ -70,16 +70,11 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
              ] = json_response(conn, 200)["data"]
 
       assert [id, slug] == [councillor.id, councillor.slug]
-    end
-
-    defp create_council(_) do
-      council = fixture(:council)
-      %{council: council}
     end
   end
 
   describe "show" do
-    setup [:create_councillor, :create_council]
+    setup [:create_councillor, :create_authority]
 
     test "renders councillor when data is valid", %{
       conn: conn,
@@ -101,8 +96,8 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
     %{councillor: councillor}
   end
 
-  defp create_council(_) do
-    council = fixture(:council)
-    %{council: council}
+  defp create_authority(_) do
+    authority = fixture(:authority)
+    %{authority: authority}
   end
 end

@@ -1,4 +1,4 @@
-defmodule Counciltracker.Councils.Council do
+defmodule Counciltracker.Authorities.Authority do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,7 +6,7 @@ defmodule Counciltracker.Councils.Council do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  schema "councils" do
+  schema "authorities" do
     field :name, :string
     has_many :councillors, Councillor
 
@@ -14,8 +14,8 @@ defmodule Counciltracker.Councils.Council do
   end
 
   @doc false
-  def changeset(council, attrs) do
-    council
+  def changeset(authority, attrs) do
+    authority
     |> cast(attrs, [:name])
     |> validate_required([:name])
   end
