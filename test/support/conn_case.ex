@@ -25,6 +25,7 @@ defmodule CounciltrackerWeb.ConnCase do
       import CounciltrackerWeb.ConnCase
 
       alias CounciltrackerWeb.Router.Helpers, as: Routes
+      alias Ecto.Adapters.SQL.Sandbox
 
       # The default endpoint for testing
       @endpoint CounciltrackerWeb.Endpoint
@@ -32,10 +33,10 @@ defmodule CounciltrackerWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Counciltracker.Repo)
+    :ok = SQL.Sandbox.checkout(Counciltracker.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Counciltracker.Repo, {:shared, self()})
+      SQL.Sandbox.mode(Counciltracker.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

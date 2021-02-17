@@ -1,4 +1,8 @@
 defmodule Counciltracker.Events.Event do
+  @moduledoc """
+  The Event schema
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

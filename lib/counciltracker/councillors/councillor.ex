@@ -1,4 +1,8 @@
 defmodule Counciltracker.Councillors.Councillor do
+  @moduledoc """
+  The Councillor schema
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

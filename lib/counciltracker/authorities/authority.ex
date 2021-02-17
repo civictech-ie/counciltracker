@@ -1,4 +1,8 @@
 defmodule Counciltracker.Authorities.Authority do
+  @moduledoc """
+  The Authority schema
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

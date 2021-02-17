@@ -19,6 +19,7 @@ defmodule Counciltracker.DataCase do
   using do
     quote do
       alias Counciltracker.Repo
+      alias Ecto.Adapters.SQL.Sandbox
 
       import Ecto
       import Ecto.Changeset
@@ -28,10 +29,10 @@ defmodule Counciltracker.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Counciltracker.Repo)
+    :ok = Sandbox.checkout(Counciltracker.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Counciltracker.Repo, {:shared, self()})
+      Sandbox.mode(Counciltracker.Repo, {:shared, self()})
     end
 
     :ok

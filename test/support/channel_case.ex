@@ -23,16 +23,18 @@ defmodule CounciltrackerWeb.ChannelCase do
       import Phoenix.ChannelTest
       import CounciltrackerWeb.ChannelCase
 
+      alias Ecto.Adapters.SQL.Sandbox
+
       # The default endpoint for testing
       @endpoint CounciltrackerWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Counciltracker.Repo)
+    :ok = SQL.Sandbox.checkout(Counciltracker.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Counciltracker.Repo, {:shared, self()})
+      SQL.Sandbox.mode(Counciltracker.Repo, {:shared, self()})
     end
 
     :ok
