@@ -11,10 +11,11 @@ config :counciltracker, Counciltracker.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 if System.get_env("GITHUB_ACTIONS") do
-  config :flngn, MyApp.Repo,
+  config :counciltracker, Counciltracker.Repo,
     database: "counciltracker_test",
     username: "postgres",
-    password: "postgres"
+    password: "postgres",
+  hostname: System.get_env("DB_HOST", "localhost"),
 end
 
 # We don't run a server during test. If one is required,
