@@ -7,8 +7,6 @@ defmodule Counciltracker.EventsTest do
     alias Counciltracker.Events.Event
 
     @valid_attrs %{occurred_on: ~D[2010-04-17], type: "election"}
-    @update_attrs %{occurred_on: ~D[2011-05-18], type: "election"}
-    @invalid_attrs %{occurred_on: nil, type: nil}
 
     def event_fixture(attrs \\ %{}) do
       {:ok, event} =

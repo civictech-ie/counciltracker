@@ -3,7 +3,6 @@ defmodule CounciltrackerWeb.CouncillorController do
 
   alias Counciltracker.Authorities
   alias Counciltracker.Councillors
-  alias Counciltracker.Councillors.Councillor
 
   action_fallback CounciltrackerWeb.FallbackController
 
