@@ -15,7 +15,7 @@ if System.get_env("GITHUB_ACTIONS") do
     database: "counciltracker_test",
     username: "postgres",
     password: "postgres",
-  hostname: System.get_env("DB_HOST", "localhost"),
+    hostname: System.get_env("DB_HOST", "localhost")
 end
 
 # We don't run a server during test. If one is required,
