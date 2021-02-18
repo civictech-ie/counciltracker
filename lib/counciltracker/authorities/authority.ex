@@ -3,13 +3,11 @@ defmodule Counciltracker.Authorities.Authority do
   The Authority schema
   """
 
-  use Ecto.Schema
+  use Counciltracker.Schema
   import Ecto.Changeset
 
   alias Counciltracker.Councillors.Councillor
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
   schema "authorities" do
     field :name, :string
     has_many :councillors, Councillor

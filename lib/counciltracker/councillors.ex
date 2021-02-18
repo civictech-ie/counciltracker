@@ -19,14 +19,9 @@ defmodule Counciltracker.Councillors do
     |> Repo.all()
   end
 
-  def get_councillor!(%Authority{id: authority_id}, id) do
-    from(Councillor, where: [id: ^id, authority_id: ^authority_id], limit: 1)
-    |> Repo.one!()
-  end
-
-  def create_councillor(%Authority{id: authority_id}, %{} = attrs) do
+  def create_councillor(%Authority{id: authority_id}, attrs) do
     %Councillor{}
-    |> Councillor.changeset(Enum.into(attrs, %{authority_id: authority_id}))
+    |> Councillor.changeset(attrs |> Enum.into(%{authority_id: authority_id}))
     |> Repo.insert()
   end
 
@@ -36,14 +31,9 @@ defmodule Counciltracker.Councillors do
     |> Repo.insert()
   end
 
-  def update_councillor(%Councillor{} = councillor, attrs) do
-    councillor
-    |> Councillor.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def delete_councillor(%Councillor{} = councillor) do
-    Repo.delete(councillor)
+  def get_councillor!(%Authority{id: authority_id}, id) do
+    from(Councillor, where: [id: ^id, authority_id: ^authority_id], limit: 1)
+    |> Repo.one!()
   end
 
   def change_councillor(%Councillor{} = councillor, attrs \\ %{}) do

@@ -4,8 +4,8 @@ defmodule Counciltracker.Repo.Migrations.CreateCouncillors do
   def change do
     create table(:councillors, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :surname, :text, default: ""
-      add :given_name, :text, default: ""
+      add :surname, :text, null: false, default: ""
+      add :given_name, :text, null: false, default: ""
       add :slug, :text, null: false
 
       add :authority_id, references(:authorities, on_delete: :delete_all, type: :uuid),
