@@ -6,99 +6,64 @@ defmodule Counciltracker.Events do
   import Ecto.Query, warn: false
   alias Counciltracker.Repo
 
+  alias Counciltracker.Authorities.Authority
   alias Counciltracker.Events.Event
 
-  @doc """
-  Returns the list of events.
-
-  ## Examples
-
-      iex> list_events()
-      [%Event{}, ...]
-
-  """
-  def list_events do
-    Repo.all(Event)
+  def list_events(%Authority{id: authority_id}) do
+    from(Event, where: [authority_id: ^authority_id])
+    |> Repo.all()
   end
 
-  @doc """
-  Gets a single event.
+  def list_unprocessed_events(%Authority{id: authority_id}) do
+    from(e in Event,
+      where:
+        is_nil(e.processed_at) and
+          e.authority_id ==
+            ^authority_id
+    )
+    |> Repo.all()
+  end
 
-  Raises `Ecto.NoResultsError` if the Event does not exist.
-
-  ## Examples
-
-      iex> get_event!(123)
-      %Event{}
-
-      iex> get_event!(456)
-      ** (Ecto.NoResultsError)
-
-  """
   def get_event!(id), do: Repo.get!(Event, id)
 
-  @doc """
-  Creates a event.
-
-  ## Examples
-
-      iex> create_event(%{field: value})
-      {:ok, %Event{}}
-
-      iex> create_event(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def create_event(attrs \\ %{}) do
     %Event{}
     |> Event.changeset(attrs)
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a event.
-
-  ## Examples
-
-      iex> update_event(event, %{field: new_value})
-      {:ok, %Event{}}
-
-      iex> update_event(event, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def update_event(%Event{} = event, attrs) do
     event
     |> Event.changeset(attrs)
     |> Repo.update()
   end
 
-  @doc """
-  Deletes a event.
-
-  ## Examples
-
-      iex> delete_event(event)
-      {:ok, %Event{}}
-
-      iex> delete_event(event)
-      {:error, %Ecto.Changeset{}}
-
-  """
   def delete_event(%Event{} = event) do
     Repo.delete(event)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking event changes.
-
-  ## Examples
-
-      iex> change_event(event)
-      %Ecto.Changeset{data: %Event{}}
-
-  """
   def change_event(%Event{} = event, attrs \\ %{}) do
     Event.changeset(event, attrs)
+  end
+
+  def process!(%Authority{} = authority) do
+    authority
+    |> list_unprocessed_events
+    |> Enum.each(&process_event!(&1))
+  end
+
+  defp process_event!(%Event{} = event) do
+    event
+    |> Event.process()
+    |> Repo.transaction()
+    |> case do
+      {:ok, map} ->
+        IO.puts("SUCKSESS")
+        IO.inspect(map)
+
+      {:error, name, value, changes_so_far} ->
+        IO.puts("FAILURE")
+        IO.inspect(%{name: name, value: value, changes_so_far: changes_so_far})
+    end
   end
 end

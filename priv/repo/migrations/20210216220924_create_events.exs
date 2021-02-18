@@ -11,6 +11,7 @@ defmodule Counciltracker.Repo.Migrations.CreateEvents do
 
     create table(:events, primary_key: false) do
       add :id, :binary_id, primary_key: true
+      add :processed_at, :utc_datetime
       add :occurred_on, :date, null: false
       add :type, :event_type, null: false
       add :parameters, :map, default: %{}, null: false
@@ -21,6 +22,7 @@ defmodule Counciltracker.Repo.Migrations.CreateEvents do
       timestamps()
     end
 
+    create(index(:events, [:processed_at]))
     create(index(:events, [:authority_id]))
     create(index(:events, [:occurred_on]))
     create(index(:events, [:type]))

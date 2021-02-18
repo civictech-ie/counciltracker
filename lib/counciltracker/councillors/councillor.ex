@@ -6,13 +6,14 @@ defmodule Counciltracker.Councillors.Councillor do
   use Counciltracker.Schema
   import Ecto.Changeset
 
+  alias Counciltracker.Terms.Term
   alias Counciltracker.Authorities.Authority
 
   schema "councillors" do
     field :given_name, :string
     field :slug, :string
     field :surname, :string
-    belongs_to :authority, Authority
+    has_many :terms, Term
 
     timestamps()
   end
@@ -20,13 +21,18 @@ defmodule Counciltracker.Councillors.Councillor do
   @doc false
   def changeset(councillor, attrs) do
     councillor
-    |> cast(Map.put(attrs, :slug, generate_slug(attrs)), [
-      :authority_id,
-      :surname,
-      :given_name,
-      :slug
-    ])
-    |> validate_required([:authority_id, :surname, :given_name, :slug])
+    |> cast(
+      attrs
+      |> Enum.into(%{
+        slug: generate_slug(attrs)
+      }),
+      [
+        :surname,
+        :given_name,
+        :slug
+      ]
+    )
+    |> validate_required([:surname, :given_name, :slug])
   end
 
   defp generate_slug(%{given_name: "", surname: ""}), do: nil

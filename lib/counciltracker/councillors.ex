@@ -9,14 +9,22 @@ defmodule Counciltracker.Councillors do
   alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors.Councillor
 
-  def list_councillors(%Authority{id: authority_id}) do
-    from(Councillor, where: [authority_id: ^authority_id])
-    |> Repo.all()
+  def list_councillors(:current) do
+    Councillor |> Repo.all() |> Repo.preload(:terms)
   end
 
-  def list_councillors(%Authority{id: authority_id}, %Date{} = date) do
-    from(Councillor, where: [authority_id: ^authority_id])
-    |> Repo.all()
+  def get_councillor(slug: slug) do
+    from(Councillor, where: [slug: ^slug], limit: 1)
+    |> Repo.one()
+  end
+
+  def get_councillor!(id) do
+    from(Councillor, where: [id: ^id], limit: 1)
+    |> Repo.one!()
+  end
+
+  def change_councillor(%Councillor{} = councillor, attrs \\ %{}) do
+    Councillor.changeset(councillor, attrs)
   end
 
   def create_councillor(%Authority{id: authority_id}, attrs) do
@@ -29,14 +37,5 @@ defmodule Counciltracker.Councillors do
     %Councillor{}
     |> Councillor.changeset(attrs)
     |> Repo.insert()
-  end
-
-  def get_councillor!(%Authority{id: authority_id}, id) do
-    from(Councillor, where: [id: ^id, authority_id: ^authority_id], limit: 1)
-    |> Repo.one!()
-  end
-
-  def change_councillor(%Councillor{} = councillor, attrs \\ %{}) do
-    Councillor.changeset(councillor, attrs)
   end
 end

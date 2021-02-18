@@ -13,6 +13,9 @@
 Counciltracker.Repo.delete_all(Counciltracker.Authorities.Authority)
 Counciltracker.Repo.delete_all(Counciltracker.Events.Event)
 
+Counciltracker.Repo.delete_all(Counciltracker.Councillors.Councillor)
+Counciltracker.Repo.delete_all(Counciltracker.Terms.Term)
+
 authority =
   Counciltracker.Repo.insert!(%Counciltracker.Authorities.Authority{
     name: "Dublin City Council"
@@ -35,7 +38,15 @@ Counciltracker.Repo.insert!(%Counciltracker.Events.Event{
         surname: "MacVeigh",
         area: "South West Inner City",
         party: "People Before Profit"
+      },
+      %{
+        given_name: "Michael",
+        surname: "Watters",
+        area: "South West Inner City",
+        party: "Fianna Fáil"
       }
     ]
   }
 })
+
+Counciltracker.Events.process!(authority)

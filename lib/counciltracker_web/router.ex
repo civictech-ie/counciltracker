@@ -23,7 +23,6 @@ defmodule CounciltrackerWeb.Router do
     pipe_through :api
 
     resources "/councillors", CouncillorController, only: [:show, :index]
-    resources "/events", EventController, only: [:show, :index]
   end
 
   # Other scopes may use custom stacks.

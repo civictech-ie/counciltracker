@@ -1,1 +1,15 @@
-Home Page
+<h1>Council Tracker</h1>
+
+<table>
+<%= for councillor <- @councillors do %>
+  <tr>
+    <td>
+      <%= councillor.given_name %>
+      <%= councillor.surname %>
+<%= for term <- councillor.terms do %>
+      <p><%= term.starts_on %>&mdash;<%= term.ends_on %></p>
+<% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

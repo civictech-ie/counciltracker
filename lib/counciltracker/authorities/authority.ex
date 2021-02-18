@@ -6,11 +6,15 @@ defmodule Counciltracker.Authorities.Authority do
   use Counciltracker.Schema
   import Ecto.Changeset
 
+  alias Counciltracker.Terms.Term
+  alias Counciltracker.Events.Event
   alias Counciltracker.Councillors.Councillor
 
   schema "authorities" do
     field :name, :string
-    has_many :councillors, Councillor
+    has_many :events, Event
+    has_many :terms, Term
+    has_many :councillors, through: [:terms, :councillors]
 
     timestamps()
   end
