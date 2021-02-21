@@ -1,6 +1,7 @@
 defmodule CounciltrackerWeb.CouncillorView do
   use CounciltrackerWeb, :view
   alias CounciltrackerWeb.CouncillorView
+  alias CounciltrackerWeb.TermView
 
   def render("bad_request.json", %{}) do
     %{error: "Bad request"}
@@ -20,17 +21,7 @@ defmodule CounciltrackerWeb.CouncillorView do
       surname: councillor.surname,
       given_name: councillor.given_name,
       slug: councillor.slug,
-      terms: render_many(councillor.terms, CouncillorView, "term.json")
-    }
-  end
-
-  # TODO: move to terms controller
-
-  def render("term.json", %{councillor: term}) do
-    %{
-      id: term.id,
-      starts_on: term.starts_on,
-      ends_on: term.ends_on
+      terms: render_many(councillor.terms, TermView, "term.json")
     }
   end
 end

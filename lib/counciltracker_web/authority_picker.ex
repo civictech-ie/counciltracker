@@ -1,4 +1,8 @@
 defmodule CounciltrackerWeb.AuthorityPicker do
+  @moduledoc """
+  The Authority Picker takes a conn's host, assigns an authority, returns the conn.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 

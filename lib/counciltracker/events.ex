@@ -57,13 +57,8 @@ defmodule Counciltracker.Events do
     |> Event.process()
     |> Repo.transaction()
     |> case do
-      {:ok, map} ->
-        IO.puts("SUCKSESS")
-        IO.inspect(map)
-
-      {:error, name, value, changes_so_far} ->
-        IO.puts("FAILURE")
-        IO.inspect(%{name: name, value: value, changes_so_far: changes_so_far})
+      {:ok, map} -> nil
+      {:error, name, value, changes_so_far} -> nil
     end
   end
 end

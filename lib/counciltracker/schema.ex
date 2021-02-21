@@ -1,4 +1,8 @@
 defmodule Counciltracker.Schema do
+  @moduledoc """
+  Use binary ids and autogenerate them, for now
+  """
+
   defmacro __using__(_) do
     quote do
       use Ecto.Schema
