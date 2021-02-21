@@ -8,10 +8,6 @@ defmodule Counciltracker.Terms do
 
   alias Counciltracker.Terms.Term
 
-  def list_terms do
-    Repo.all(Term)
-  end
-
   def get_term!(id), do: Repo.get!(Term, id)
 
   def create_term(attrs \\ %{}) do

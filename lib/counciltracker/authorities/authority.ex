@@ -12,6 +12,8 @@ defmodule Counciltracker.Authorities.Authority do
 
   schema "authorities" do
     field :name, :string
+    field :hosts, {:array, :string}
+
     has_many :events, Event
     has_many :terms, Term
     has_many :councillors, through: [:terms, :councillors]
@@ -22,7 +24,7 @@ defmodule Counciltracker.Authorities.Authority do
   @doc false
   def changeset(authority, attrs) do
     authority
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :hosts])
+    |> validate_required([:name, :hosts])
   end
 end

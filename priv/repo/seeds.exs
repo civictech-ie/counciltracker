@@ -18,7 +18,8 @@ Counciltracker.Repo.delete_all(Counciltracker.Terms.Term)
 
 authority =
   Counciltracker.Repo.insert!(%Counciltracker.Authorities.Authority{
-    name: "Dublin City Council"
+    name: "Dublin City Council",
+    hosts: ["localhost"]
   })
 
 Counciltracker.Repo.insert!(%Counciltracker.Events.Event{

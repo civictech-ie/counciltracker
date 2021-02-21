@@ -2,10 +2,9 @@ defmodule Counciltracker.EventsTest do
   use Counciltracker.DataCase
 
   alias Counciltracker.Events
+  # alias Counciltracker.Events.Event
 
   describe "events" do
-    alias Counciltracker.Events.Event
-
     @valid_attrs %{occurred_on: ~D[2010-04-17], type: "election"}
 
     def event_fixture(attrs \\ %{}) do

@@ -4,7 +4,7 @@ defmodule CounciltrackerWeb.PageController do
   alias Counciltracker.Councillors
 
   def home(conn, _params) do
-    councillors = Councillors.list_councillors(:current)
+    councillors = Councillors.list_councillors(:current, conn.assigns.current_authority)
     render(conn, "home.html", councillors: councillors)
   end
 end

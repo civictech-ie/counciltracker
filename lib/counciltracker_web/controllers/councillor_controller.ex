@@ -9,7 +9,8 @@ defmodule CounciltrackerWeb.CouncillorController do
   def index(conn, %{"date" => date_str}) do
     case Date.from_iso8601(date_str) do
       {:ok, date} ->
-        councillors = Councillors.list_councillors(current_authority(), date)
+        councillors = Councillors.list_councillors(date, conn.assigns.current_authority)
+
         render(conn, "index.json", councillors: councillors)
 
       _ ->
@@ -18,16 +19,12 @@ defmodule CounciltrackerWeb.CouncillorController do
   end
 
   def index(conn, _params) do
-    councillors = Councillors.list_councillors(current_authority())
+    councillors = Councillors.list_councillors(conn.assigns.current_authority)
     render(conn, "index.json", councillors: councillors)
   end
 
   def show(conn, %{"id" => id}) do
-    councillor = Councillors.get_councillor!(current_authority(), id)
+    councillor = Councillors.get_councillor!(id, conn.assigns.current_authority)
     render(conn, "show.json", councillor: councillor)
-  end
-
-  defp current_authority do
-    Authorities.get_authority!(:current)
   end
 end

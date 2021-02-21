@@ -7,33 +7,60 @@ defmodule Counciltracker.Councillors do
   alias Counciltracker.Repo
 
   alias Counciltracker.Authorities.Authority
+  alias Counciltracker.Terms.Term
   alias Counciltracker.Councillors.Councillor
 
-  def list_councillors(:current) do
-    Councillor |> Repo.all() |> Repo.preload(:terms)
+  def list_councillors(%Authority{} = authority) do
+    query =
+      from c in Councillor,
+        join: t in Term,
+        on: c.id == t.councillor_id,
+        where: t.authority_id == ^authority.id
+
+    query |> Repo.all() |> Repo.preload(:terms)
   end
 
-  def get_councillor(slug: slug) do
-    from(Councillor, where: [slug: ^slug], limit: 1)
-    |> Repo.one()
+  def list_councillors(:current, %Authority{} = authority) do
+    list_councillors(Date.utc_today(), authority)
   end
 
-  def get_councillor!(id) do
-    from(Councillor, where: [id: ^id], limit: 1)
-    |> Repo.one!()
+  def list_councillors(%Date{} = date, %Authority{} = authority) do
+    query =
+      from c in Councillor,
+        join: t in Term,
+        on: c.id == t.councillor_id,
+        where:
+          t.authority_id == ^authority.id and t.starts_on < ^date and
+            (is_nil(t.ends_on) or t.ends_on > ^date)
+
+    query |> Repo.all() |> Repo.preload(:terms)
+  end
+
+  def get_councillor_by_slug!(slug, %Authority{} = authority) do
+    query =
+      from c in Councillor,
+        join: t in Term,
+        on: c.id == t.councillor_id,
+        where: t.authority_id == ^authority.id and c.slug == ^slug
+
+    query |> Repo.one() |> Repo.preload(:terms)
+  end
+
+  def get_councillor_by_id!(id, %Authority{} = authority) do
+    query =
+      from c in Councillor,
+        join: t in Term,
+        on: c.id == t.councillor_id,
+        where: t.authority_id == ^authority.id and c.id == ^id
+
+    query |> Repo.one() |> Repo.preload(:terms)
   end
 
   def change_councillor(%Councillor{} = councillor, attrs \\ %{}) do
     Councillor.changeset(councillor, attrs)
   end
 
-  def create_councillor(%Authority{id: authority_id}, attrs) do
-    %Councillor{}
-    |> Councillor.changeset(attrs |> Enum.into(%{authority_id: authority_id}))
-    |> Repo.insert()
-  end
-
-  def create_councillor(attrs \\ %{}) do
+  def create_councillor(attrs) do
     %Councillor{}
     |> Councillor.changeset(attrs)
     |> Repo.insert()

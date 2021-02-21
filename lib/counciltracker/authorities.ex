@@ -8,11 +8,10 @@ defmodule Counciltracker.Authorities do
 
   alias Counciltracker.Authorities.Authority
 
-  def list_authorities do
-    Repo.all(Authority)
+  def get_authority_by!(host: host) do
+    query = from a in Authority, where: ^host in a.hosts, limit: 1
+    query |> Repo.one()
   end
-
-  def get_authority!(:current), do: from(Authority, limit: 1) |> Repo.one!()
 
   def get_authority!(id), do: Repo.get!(Authority, id)
 

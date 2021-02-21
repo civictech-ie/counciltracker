@@ -19,7 +19,18 @@ defmodule CounciltrackerWeb.CouncillorView do
       id: councillor.id,
       surname: councillor.surname,
       given_name: councillor.given_name,
-      slug: councillor.slug
+      slug: councillor.slug,
+      terms: render_many(councillor.terms, CouncillorView, "term.json")
+    }
+  end
+
+  # TODO: move to terms controller
+
+  def render("term.json", %{councillor: term}) do
+    %{
+      id: term.id,
+      starts_on: term.starts_on,
+      ends_on: term.ends_on
     }
   end
 end
