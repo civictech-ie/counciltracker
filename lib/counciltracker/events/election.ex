@@ -5,8 +5,8 @@ defmodule Counciltracker.Events.Election do
 
   alias Ecto.Multi
 
-  alias Counciltracker.Events.Event
   alias Counciltracker.Councillors.Councillor
+  alias Counciltracker.Events.Event
   alias Counciltracker.Terms.Term
 
   def process(%Event{type: :election} = event) do

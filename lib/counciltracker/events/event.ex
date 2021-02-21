@@ -6,9 +6,9 @@ defmodule Counciltracker.Events.Event do
   use Counciltracker.Schema
   import Ecto.Changeset
 
-  alias Counciltracker.Events.Event
-  alias Counciltracker.Events.Election
   alias Counciltracker.Authorities.Authority
+  alias Counciltracker.Events.Election
+  alias Counciltracker.Events.Event
 
   schema "events" do
     field :processed_at, :utc_datetime

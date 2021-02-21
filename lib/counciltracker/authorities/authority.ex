@@ -6,9 +6,9 @@ defmodule Counciltracker.Authorities.Authority do
   use Counciltracker.Schema
   import Ecto.Changeset
 
-  alias Counciltracker.Terms.Term
-  alias Counciltracker.Events.Event
   alias Counciltracker.Councillors.Councillor
+  alias Counciltracker.Events.Event
+  alias Counciltracker.Terms.Term
 
   schema "authorities" do
     field :name, :string

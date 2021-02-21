@@ -7,8 +7,8 @@ defmodule Counciltracker.Councillors do
   alias Counciltracker.Repo
 
   alias Counciltracker.Authorities.Authority
-  alias Counciltracker.Terms.Term
   alias Counciltracker.Councillors.Councillor
+  alias Counciltracker.Terms.Term
 
   def list_councillors(%Authority{} = authority) do
     query =
