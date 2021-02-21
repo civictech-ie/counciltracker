@@ -4,8 +4,8 @@ defmodule Counciltracker.Repo.Migrations.CreateEvents do
   def change do
     create_enum_query =
       "CREATE TYPE event_type AS ENUM ('election', 'change_of_affiliation', 'co_option')"
-    drop_enum_query =
-      "DROP TYPE event_type"
+
+    drop_enum_query = "DROP TYPE event_type"
 
     execute(create_enum_query, drop_enum_query)
 
@@ -27,11 +27,9 @@ defmodule Counciltracker.Repo.Migrations.CreateEvents do
     create(index(:events, [:occurred_on]))
     create(index(:events, [:type]))
 
-    create_index_query =
-      "CREATE INDEX event_parameters ON events USING GIN(parameters)"
+    create_index_query = "CREATE INDEX event_parameters ON events USING GIN(parameters)"
 
-    drop_index_query =
-      "DROP INDEX event_parameters"
+    drop_index_query = "DROP INDEX event_parameters"
 
     execute(create_index_query, drop_index_query)
   end

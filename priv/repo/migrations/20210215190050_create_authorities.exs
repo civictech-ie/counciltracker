@@ -10,7 +10,6 @@ defmodule Counciltracker.Repo.Migrations.CreateAuthorities do
       timestamps()
     end
 
-
     create(index(:authorities, [:hosts]))
   end
 end
