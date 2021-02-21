@@ -23,8 +23,8 @@ defmodule CounciltrackerWeb.CouncillorController do
     render(conn, "index.json", councillors: councillors)
   end
 
-  def show(conn, %{"id" => id}) do
-    councillor = Councillors.get_councillor!(id, conn.assigns.current_authority)
+  def show(conn, %{"slug" => slug}) do
+    councillor = Councillors.get_councillor_by_slug!(slug, conn.assigns.current_authority)
     render(conn, "show.json", councillor: councillor)
   end
 end
