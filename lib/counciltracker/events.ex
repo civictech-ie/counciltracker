@@ -24,28 +24,6 @@ defmodule Counciltracker.Events do
     |> Repo.all()
   end
 
-  def get_event!(id), do: Repo.get!(Event, id)
-
-  def create_event(attrs \\ %{}) do
-    %Event{}
-    |> Event.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def update_event(%Event{} = event, attrs) do
-    event
-    |> Event.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def delete_event(%Event{} = event) do
-    Repo.delete(event)
-  end
-
-  def change_event(%Event{} = event, attrs \\ %{}) do
-    Event.changeset(event, attrs)
-  end
-
   def process!(%Authority{} = authority) do
     authority
     |> list_unprocessed_events
