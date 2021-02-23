@@ -51,11 +51,11 @@ defmodule Counciltracker.CouncillorsTest do
       assert Enum.member?(councillor_ids, councillor.id)
     end
 
-    defp past_date() do
+    defp past_date do
       Date.add(Date.utc_today(), -365)
     end
 
-    defp future_date() do
+    defp future_date do
       Date.add(Date.utc_today(), 365)
     end
   end
