@@ -2,61 +2,61 @@ defmodule Counciltracker.CouncillorsTest do
   use Counciltracker.DataCase
 
   alias Counciltracker.Authorities
-  alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors
+  alias Counciltracker.Councillors.Councillor
+  alias Counciltracker.Terms
 
   describe "councillors" do
-    alias Counciltracker.Councillors.Councillor
-
     @authority_attrs %{name: "Dublin City Council", hosts: ["www.example.com"]}
-    @valid_attrs %{given_name: "Joe", surname: "Costello"}
-    @update_attrs %{given_name: "Tara", surname: "Deacy"}
-    @invalid_attrs %{given_name: nil, surname: nil}
+    @councillor_attrs %{given_name: "Joe", surname: "Costello"}
 
-    def authority_fixture(attrs \\ %{}) do
-      {:ok, authority} =
-        attrs
-        |> Enum.into(@authority_attrs)
-        |> Authorities.create_authority()
+    test "list_councillors/1" do
+      {:ok, councillor} = Councillors.create_councillor(@councillor_attrs)
+      {:ok, authority} = Authorities.create_authority(@authority_attrs)
 
-      authority
+      assert Councillors.list_councillors(authority) == []
+
+      {:ok, term} =
+        Terms.create_term(%{
+          councillor_id: councillor.id,
+          authority_id: authority.id,
+          starts_on: past_date()
+        })
+
+      councillor_ids = Councillors.list_councillors(authority) |> Enum.map(& &1.id)
+
+      assert councillor_ids == [councillor.id]
     end
 
-    def councillor_fixture(attrs \\ %{}) do
-      authority = authority_fixture()
+    test "list_councillors/2" do
+      {:ok, councillor} = Councillors.create_councillor(@councillor_attrs)
+      {:ok, authority} = Authorities.create_authority(@authority_attrs)
 
-      {:ok, councillor} = Councillors.create_councillor(attrs |> Enum.into(@valid_attrs))
+      assert Councillors.list_councillors(:current, authority) == []
 
-      councillor
+      {:ok, term} =
+        Terms.create_term(%{
+          councillor_id: councillor.id,
+          authority_id: authority.id,
+          starts_on: future_date()
+        })
+
+      councillor_ids = Councillors.list_councillors(:current, authority) |> Enum.map(& &1.id)
+
+      assert !Enum.member?(councillor_ids, councillor.id)
+
+      councillor_ids =
+        Councillors.list_councillors(Date.add(future_date(), 1), authority) |> Enum.map(& &1.id)
+
+      assert Enum.member?(councillor_ids, councillor.id)
     end
 
-    # test "list_councillors/1 returns all councillors for an authority today" do
-    #   authority = authority_fixture()
-    #   councillor = councillor_fixture()
+    defp past_date() do
+      Date.add(Date.utc_today(), -365)
+    end
 
-    #   assert Councillors.list_councillors(authority) == [councillor]
-    # end
-
-    # test "list_councillors/2 returns all councillors for an authority on a given date" do
-    #   authority = authority_fixture()
-    #   councillor = councillor_fixture()
-
-    #   date = ~D[2020-01-01]
-    #   assert Councillors.list_councillors(authority, date) != [councillor]
-    # end
-
-    # test "get_councillor!/2 returns the councillor with given id" do
-    #   authority = authority_fixture()
-    #   councillor = councillor_fixture()
-
-    #   assert Councillors.get_councillor!(authority, councillor.id) == councillor
-    # end
-
-    # test "change_councillor/1 returns a councillor changeset" do
-    #   _authority = authority_fixture()
-    #   councillor = councillor_fixture()
-
-    #   assert %Ecto.Changeset{} = Councillors.change_councillor(councillor)
-    # end
+    defp future_date() do
+      Date.add(Date.utc_today(), 365)
+    end
   end
 end

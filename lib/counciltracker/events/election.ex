@@ -56,48 +56,4 @@ defmodule Counciltracker.Events.Election do
       })
     end)
   end
-
-  # defp process_councillor(multi, index, councillor_struct, %Event{
-  #        authority_id: authority_id,
-  #        occurred_on: occurred_on
-  #      }) do
-  #   multi
-  #   |> Multi.append
-  # end
-
-  # defp insert_terms(
-  #        multi,
-  #        %Event{
-  #          type: :election,
-  #          authority_id: authority_id,
-  #          parameters: %{"councillors" => councillors}
-  #        } = event
-  #      ) do
-  #   councillors
-  #   |> Enum.with_index()
-  #   |> Enum.reduce(multi, fn {councillor, index}, multi ->
-  #     multi |> insert_term(index, councillor, authority_id)
-  #   end)
-  # end
-
-  # defp insert_term(multi, index, %{} = councillor, authority_id) do
-  #   slug = "#{councillor["given_name"]}-#{councillor["surname"]}" |> String.to_atom()
-
-  #   |> Multi.insert(
-  #     {slug, :councillor},
-  #     Councillor.changeset(%Councillor{}, %{
-  #       given_name: councillor["given_name"],
-  #       surname: councillor["surname"]
-  #     })
-  #   )
-  #   |> Multi.insert(
-  #     {slug, :term},
-  #     fn %{{slug, :councillor} => %Councillor{id: councillor_id}} ->
-  #       Term.changeset(%Term{}, %{
-  #         councillor_id: councillor_id,
-  #         authority_id: authority_id
-  #       })
-  #     end
-  #   )
-  # end
 end

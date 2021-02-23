@@ -56,10 +56,6 @@ defmodule Counciltracker.Councillors do
     query |> Repo.one() |> Repo.preload(:terms)
   end
 
-  def change_councillor(%Councillor{} = councillor, attrs \\ %{}) do
-    Councillor.changeset(councillor, attrs)
-  end
-
   def create_councillor(attrs) do
     %Councillor{}
     |> Councillor.changeset(attrs)

@@ -5,6 +5,8 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
   alias Counciltracker.Authorities.Authority
   alias Counciltracker.Councillors
   alias Counciltracker.Councillors.Councillor
+  alias Counciltracker.Terms
+  alias Counciltracker.Terms.Term
 
   @council_attrs %{
     name: "Dublin City Council",
@@ -23,10 +25,21 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
   end
 
   def fixture(:councillor) do
-    authority = fixture(:authority)
-
     case Councillors.create_councillor(@councillor_attrs) do
       {:ok, %Councillor{} = councillor} -> councillor
+    end
+  end
+
+  def fixture(:term) do
+    councillor = fixture(:councillor)
+    authority = fixture(:authority)
+
+    case Terms.create_term(%{
+           councillor_id: councillor.id,
+           authority_id: authority.id,
+           starts_on: Date.utc_today() |> Date.add(-182)
+         }) do
+      {:ok, %Term{} = term} -> term
     end
   end
 
@@ -35,7 +48,7 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
   end
 
   describe "index" do
-    setup [:create_authority, :create_councillor]
+    setup [:create_authority, :create_councillor, :create_term]
 
     test "lists all councillors", %{conn: conn} do
       conn = get(conn, Routes.councillor_path(conn, :index))
@@ -107,6 +120,11 @@ defmodule CounciltrackerWeb.CouncillorControllerTest do
   defp create_councillor(_) do
     councillor = fixture(:councillor)
     %{councillor: councillor}
+  end
+
+  defp create_term(_) do
+    term = fixture(:term)
+    %{term: term}
   end
 
   defp create_authority(_) do
